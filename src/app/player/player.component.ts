@@ -8,11 +8,12 @@ import { Component, Input } from '@angular/core';
   styleUrl: './player.component.scss'
 })
 export class PlayerComponent {
- 
+
   constructor() {
     this.name = ""
   }
 
   @Input() name: string;
+  @Input() playerActive: boolean = false;
 
 }
