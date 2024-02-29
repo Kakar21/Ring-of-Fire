@@ -1,6 +1,3 @@
-<app-player *ngFor="let player of game.players; let i = index;" [ngStyle]="{'top.px': 100 + (i * 90)}"
-    class="player-position" [playerActive]="i === game.currentPlayer" [name]="player"></app-player>
-
 <div class="field">
 
     <div class="card-stack">
@@ -18,6 +15,9 @@
             src="/assets/img/cards/{{ currentCard }}.png">
     </div>
 </div>
+
+<app-player *ngFor="let player of game.players; let i = index;" [ngStyle]="{'top.px': 100 + (i * 90)}"
+    class="player-position" [playerActive]="i === game.currentPlayer" [name]="player"></app-player>
 
 <app-game-info [card]="currentCard" class="pin-bottom"></app-game-info>
 
