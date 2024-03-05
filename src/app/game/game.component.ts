@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Game } from '../../models/game';
 import { PlayerComponent } from '../player/player.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
-
+import { Firestore, collection, collectionData, addDoc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -20,14 +21,26 @@ export class GameComponent {
   pickCardAnimation = false;
   currentCard = '';
   game: Game;
+  firestore: Firestore = inject(Firestore);
+  items$: Observable<any[]>;
 
   constructor(public dialog: MatDialog) {
     this.game = new Game();
     this.newGame();
+    const aCollection = this.getGamesRef();
+    this.items$ = collectionData(aCollection);
+    this.items$.subscribe((game) => {
+      console.log('Game update', game);
+    });
   }
 
-  newGame() {
+  async newGame() {
     console.log(this.game);
+    await addDoc(this.getGamesRef(), this.game.toJson());
+  }
+
+  getGamesRef() {
+    return collection(this.firestore, 'games');
   }
 
   takeCard() {
